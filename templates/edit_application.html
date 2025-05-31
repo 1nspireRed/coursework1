@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать заявку</title>
+</head>
+<body>
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Редактировать заявку</h2>
+
+    <form method="POST">
+        <label>Название:</label><br>
+        <input type="text" name="title" value="{{ app[0] }}" required><br><br>
+
+        <label>Описание:</label><br>
+        <textarea name="description" rows="4" cols="40">{{ app[1] }}</textarea><br><br>
+
+        <label>Сумма (₽):</label><br>
+        <input type="number" step="0.01" name="amount" value="{{ app[2] }}" required><br><br>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <br><a href="{{ url_for('my_applications') }}">Назад</a>
+{% endblock %}
+</body>
+</html>

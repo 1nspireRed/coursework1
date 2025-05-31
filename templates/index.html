@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="text-center mt-5 mb-4">
+  <h1 class="display-5">Фонд поддержки университета</h1>
+  <p class="lead">Помогаем воплощать идеи студентов и сотрудников с 2024 года</p>
+</div>
+
+<div class="row justify-content-center text-center mb-5">
+  <div class="col-md-10">
+    <p style="font-size: 1.1rem;">
+      Наша цель — поддержка инициатив, направленных на развитие университетской среды:
+      учебные и научные проекты, улучшение инфраструктуры, студенческие стартапы, спорт и творчество.
+      Мы верим, что каждый может внести вклад в общее дело.
+    </p>
+  </div>
+</div>
+
+<hr>
+
+<div class="row text-center mt-5">
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2>💰</h2>
+        <h5 class="card-title">Собрано средств</h5>
+        <p class="card-text display-6">{{ sport_total + site_total }} ₽</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2>📄</h2>
+        <h5 class="card-title">Подано заявок</h5>
+        <p class="card-text display-6">
+          {% if total_applications is defined %}
+            {{ total_applications }}
+          {% else %}
+            <!-- вставим позже -->
+            0
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2>👥</h2>
+        <h5 class="card-title">Участников</h5>
+        <p class="card-text display-6">
+          {% if total_users is defined %}
+            {{ total_users }}
+          {% else %}
+            <!-- вставим позже -->
+            0
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Левая часть -->
+  <div class="col-md-8">
+    <h1 class="mb-4">Добро пожаловать в фонд университета!</h1>
+
+    {% if user %}
+      <p class="lead">Вы вошли как <strong>{{ user.name }}</strong> ({{ user.role }})</p>
+    {% else %}
+      <p class="lead">Пожалуйста, войдите или зарегистрируйтесь, чтобы воспользоваться системой.</p>
+    {% endif %}
+
+    <hr>
+    <h4>О проекте</h4>
+    <p>
+      Наш фонд помогает студентам и сотрудникам получать финансовую поддержку на реализацию инициатив, связанных с учебной и научной деятельностью, а также развитием инфраструктуры университета.
+    </p>
+    <p>
+      Вы можете внести вклад в общее дело, сделав пожертвование в одну из актуальных целей: спортинвентарь или улучшение сайта университета.
+    </p>
+  </div>
+
+  <!-- Правая часть -->
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">🏋️ Сбор на спортинвентарь</h5>
+        <p class="mb-1">Категория: прочее</p>
+        <div class="progress mb-2">
+          <div class="progress-bar" role="progressbar"
+               style="width: {{ (sport_total / sport_goal * 100) | round(0) }}%;">
+            {{ (sport_total / sport_goal * 100) | round(0) }}%
+          </div>
+        </div>
+        <p>Собрано: {{ sport_total }} ₽ из {{ sport_goal }} ₽</p>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">💻 Сбор на улучшение сайта</h5>
+        <p class="mb-1">Категория: научная деятельность</p>
+        <div class="progress mb-2">
+          <div class="progress-bar bg-success" role="progressbar"
+               style="width: {{ (site_total / site_goal * 100) | round(0) }}%;">
+            {{ (site_total / site_goal * 100) | round(0) }}%
+          </div>
+        </div>
+        <p>Собрано: {{ site_total }} ₽ из {{ site_goal }} ₽</p>
+      </div>
+    </div>
+
+    <div class="d-grid">
+      <a href="{{ url_for('donations') }}" class="btn btn-primary">Сделать пожертвование</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

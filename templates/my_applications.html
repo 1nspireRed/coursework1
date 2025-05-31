@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Ваши заявки</h2>
+
+{% if apps %}
+  <div class="row">
+    {% for id, title, amount, status, comment in apps %}
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100 border-{{ 'warning' if status == 'На рассмотрении' else 'success' if status == 'Одобрено' else 'danger' }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ title }}</h5>
+            <p class="card-text"><strong>Сумма:</strong> {{ amount }} ₽</p>
+            <p class="card-text">
+              <strong>Статус:</strong>
+              <span class="badge
+                {% if status == 'На рассмотрении' %}bg-warning text-dark
+                {% elif status == 'Одобрено' %}bg-success
+                {% else %}bg-danger
+                {% endif %}">
+                {{ status }}
+              </span>
+            </p>
+            {% if comment %}
+              <p class="card-text"><strong>Комментарий:</strong> {{ comment }}</p>
+            {% endif %}
+
+            {% if status == 'На рассмотрении' %}
+              <a href="{{ url_for('edit_application', app_id=id) }}" class="btn btn-outline-primary btn-sm">Редактировать</a>
+            {% else %}
+              <button class="btn btn-secondary btn-sm" disabled>Редактирование недоступно</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">Вы пока не подали ни одной заявки.</p>
+{% endif %}
+
+{% endblock %}

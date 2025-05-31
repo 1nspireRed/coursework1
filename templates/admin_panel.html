@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Панель администратора</title>
+</head>
+<body>
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Панель администратора</h2>
+
+    <h3>📋 Обработка заявок</h3>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Название</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+            <th>Действия</th>
+        </tr>
+        {% for id, user, title, amount, status, comment in apps %}
+        <tr>
+            <form method="POST">
+                <td>{{ id }}<input type="hidden" name="app_id" value="{{ id }}"></td>
+                <td>{{ user }}</td>
+                <td>{{ title }}</td>
+                <td>{{ amount }}</td>
+                <td>
+                    <select name="status">
+                        <option value="На рассмотрении" {% if status == 'На рассмотрении' %}selected{% endif %}>На рассмотрении</option>
+                        <option value="Одобрено" {% if status == 'Одобрено' %}selected{% endif %}>Одобрено</option>
+                        <option value="Отклонено" {% if status == 'Отклонено' %}selected{% endif %}>Отклонено</option>
+                    </select>
+                </td>
+                <td><input type="text" name="comment" value="{{ comment }}"></td>
+                <td><button type="submit">Сохранить</button></td>
+            </form>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    <h3>📊 Отчёт по заявкам</h3>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Название</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+        </tr>
+        {% for id, user, title, amount, status, comment in applications %}
+        <tr>
+            <td>{{ id }}</td>
+            <td>{{ user }}</td>
+            <td>{{ title }}</td>
+            <td>{{ amount }}</td>
+            <td>{{ status }}</td>
+            <td>{{ comment or '-' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>💰 Отчёт по пожертвованиям</h3>
+    <p><strong>Общая сумма фонда:</strong> {{ total }} ₽</p>
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Имя</th>
+            <th>Категория</th>
+            <th>Сумма</th>
+            <th>Дата</th>
+        </tr>
+        {% for donor, category, amount, date in donations %}
+        <tr>
+            <td>{{ donor }}</td>
+            <td>{{ category }}</td>
+            <td>{{ amount }}</td>
+            <td>{{ date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if total_pages > 1 %}
+        <div style="margin-top: 20px;">
+            <strong>Страницы:</strong>
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == page %}
+                    <strong>[{{ p }}]</strong>
+                {% else %}
+                    <a href="{{ url_for('admin', page=p) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <br><a href="/">На главную</a>
+{% endblock %}
+</body>
+</html>

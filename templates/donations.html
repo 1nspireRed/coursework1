@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Форма пожертвования</h2>
+
+<form method="POST" class="row g-3">
+  <div class="col-md-6">
+    <label for="donor" class="form-label">Ваше имя</label>
+    <input type="text" class="form-control" id="donor" name="donor" required>
+  </div>
+
+  <div class="col-md-6">
+    <label for="amount" class="form-label">Сумма (₽)</label>
+    <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1" required>
+  </div>
+
+  <div class="col-12">
+    <label for="category" class="form-label">Цель пожертвования</label>
+    <select id="category" name="category" class="form-select" required>
+      <option value="прочее">🏋️‍♂️ Спортинвентарь</option>
+      <option value="научная деятельность">💻 Улучшение сайта университета</option>
+    </select>
+  </div>
+
+  <div class="col-12 text-end">
+    <button type="submit" class="btn btn-success">Пожертвовать</button>
+  </div>
+</form>
+
+<hr class="my-5">
+
+<h3>Последние пожертвования</h3>
+<table class="table table-striped mt-3">
+  <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Категория</th>
+      <th>Сумма</th>
+      <th>Дата</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for donor, category, amount, date in donations %}
+    <tr>
+      <td>{{ donor }}</td>
+      <td>{{ category }}</td>
+      <td>{{ amount }} ₽</td>
+      <td>{{ date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="mt-3"><strong>Общая сумма:</strong> {{ total }} ₽</p>
+
+{% endblock %}

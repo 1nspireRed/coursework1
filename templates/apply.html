@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Подать заявку на финансирование</h2>
+
+<form method="POST" class="row g-3">
+
+  <div class="col-12">
+    <label for="title" class="form-label">Название проекта</label>
+    <input type="text" class="form-control" id="title" name="title" required placeholder="Например: Разработка мобильного приложения">
+  </div>
+
+  <div class="col-12">
+    <label for="description" class="form-label">Описание</label>
+    <textarea class="form-control" id="description" name="description" rows="4" required placeholder="Кратко опишите цель, задачи и ожидаемый результат проекта..."></textarea>
+  </div>
+
+  <div class="col-md-6">
+    <label for="amount" class="form-label">Запрашиваемая сумма (₽)</label>
+    <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1" required>
+  </div>
+
+  <div class="col-12 text-end">
+    <button type="submit" class="btn btn-primary">Отправить заявку</button>
+  </div>
+
+</form>
+
+{% endblock %}

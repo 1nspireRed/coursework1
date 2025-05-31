@@ -1,0 +1,18 @@
+.page-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.page-border {
+  width: 250px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.35;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 30px;
+}
+

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Фонд университета</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+        }
+        .page-border {
+            width: 250px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand" href="/"> Фонд университета</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if user %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_applications') }}">Мои заявки</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('apply') }}">Подать заявку</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('donations') }}">Пожертвования</a></li>
+                    {% if user.role == 'admin' %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">Панель администратора</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Выход</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Вход</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+            {% if user %}
+            <div class="dropdown">
+              <a class="btn btn-outline-light dropdown-toggle" href="#" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                👤 {{ user.name }} ({{ user.role }})
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                {% if user.role == 'admin' %}
+                    <li><a class="dropdown-item" href="{{ url_for('admin') }}">Панель администратора</a></li>
+                {% else %}
+                    <li><a class="dropdown-item" href="{{ url_for('my_applications') }}">Мои заявки</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('apply') }}">Подать заявку</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('donations') }}">Пожертвования</a></li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">Выход</a></li>
+              </ul>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Контент + боковые панели -->
+    <div class="content-wrapper">
+        <!-- Левая панель -->
+        <div class="page-border" style="background-image: url('/static/img/students_left.jpg');"></div>
+
+        <!-- Контент -->
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Правая панель -->
+        <div class="page-border" style="background-image: url('/static/img/students_right.jpg');"></div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white">
+      <div class="container py-4">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <h5>🏛 Фонд университета</h5>
+            <p class="small">
+              Поддержка студенческих и научных инициатив. Работаем с 2024 года. Вместе мы строим лучшее будущее.
+            </p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5>Навигация</h5>
+            <ul class="list-unstyled">
+              <li><a href="{{ url_for('apply') }}" class="text-white text-decoration-none">Подать заявку</a></li>
+              <li><a href="{{ url_for('donations') }}" class="text-white text-decoration-none">Пожертвовать</a></li>
+              {% if user and user.role == 'admin' %}
+                <li><a href="{{ url_for('admin') }}" class="text-white text-decoration-none">Панель администратора</a></li>
+              {% endif %}
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5>Контакты</h5>
+            <p class="small">
+              ✉️ fund@university.ru<br>
+              📞 +7 (915) 224-1787<br>
+              © 2025 Фонд университета
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
